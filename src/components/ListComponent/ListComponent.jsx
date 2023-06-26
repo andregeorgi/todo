@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddButton from "../AddButton";
 import TextInput from "../TextInput";
 import Todo from "../Todo/Todo";
+import Stack from "@mui/material/Stack";
 
 function ListComponent() {
   const [toDo, setTodo] = useState([
@@ -10,34 +11,42 @@ function ListComponent() {
     { numberTodo: 3, content: "cooking", date: "1/16/2023" },
     { numberTodo: 4, content: "shopping", date: "4/3/2023" },
   ]);
+  const [currentText, setCurrentText] = useState("");
 
-  function handleAddTodo(newText) {
-    const newItem = {
-      numberTodo: toDo.length + 1,
-      content: newText,
-      date: new Date().toLocaleString,
-    };
-    setTodo([...toDo, newItem]);
-  }
-
-  function handleDeleteTodo() {
-    setTodo([]);
+  function handleTextInput(newText) {
+    setCurrentText(newText);
   }
 
   return (
-    <div>
-      <TextInput />
-      <AddButton label="Add" onClick={handleAddTodo} />
-      <AddButton label="Delete" onClick={handleDeleteTodo} />
-
-      {toDo.map((item, index) => (
-        <Todo
-          index={item.numberTodo}
-          contentTodo={item.content}
-          date={item.date}
-        />
-      ))}
-    </div>
+    <>
+      <div>
+        <Stack spacing={2} direction="row" className="align-items">
+          <TextInput addTodo={(e) => handleTextInput(e.target.value)} />
+          <AddButton
+            label="Add"
+            onClick={() => {
+              const newItem = {
+                numberTodo: toDo.length + 1,
+                content: currentText,
+                date: new Date().toLocaleDateString(),
+              };
+              setTodo([...toDo, newItem]);
+            }}
+          />
+          <AddButton label="Delete" onClick={() => setTodo([])} />
+        </Stack>
+      </div>
+      <div>
+        {toDo.map((item) => (
+          <Todo
+            key={item.numberTodo}
+            index={item.numberTodo}
+            contentTodo={item.content}
+            date={item.date}
+          />
+        ))}
+      </div>
+    </>
   );
 }
 

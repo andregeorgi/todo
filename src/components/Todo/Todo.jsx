@@ -4,20 +4,17 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 
 function Todo(props) {
+  console.log(props.contentTodo);
   return (
     <div>
       <List sx={{ width: "100%", maxWidth: 360 }}>
         <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <span></span>
-          </ListItemAvatar>
           <ListItemText
-            primary={"#" + props.index}
+            primary={<span>{"#" + props.index}</span>}
             secondary={
-              <React.Fragment>
+              <p>
                 <Typography
                   sx={{ display: "inline" }}
                   component="span"
@@ -26,7 +23,7 @@ function Todo(props) {
                 >
                   {props.contentTodo}
                 </Typography>
-              </React.Fragment>
+              </p>
             }
           />
           <ListItemText secondary={props.date}></ListItemText>

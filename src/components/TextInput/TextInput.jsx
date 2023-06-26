@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-function TextInput() {
+function TextInput(props) {
+  const [text, setText] = useState("");
+
+  function handleText(event) {
+    props.addTodo(event);
+    setText(event.target.value);
+  }
+
   return (
     <Box
       component="form"
@@ -12,7 +19,13 @@ function TextInput() {
       noValidate
       autoComplete="off"
     >
-      <TextField id="outlined-basic" label="Add Todo" variant="outlined" />
+      <TextField
+        id="outlined-basic"
+        label="Add Todo"
+        variant="outlined"
+        value={text}
+        onChange={handleText}
+      />
     </Box>
   );
 }
