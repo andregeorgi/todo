@@ -13,17 +13,17 @@ code {
 }
 
 .title {
-  padding: 20px;
+  padding-left: 80px;
 }
 
 .content {
-  padding-left: 15px;
+  padding-left: 75px;
 }
 
 .btn-color {
   color: #212d40;
 }
 
-.content-list {
-  color: pink;
+.align-items {
+  align-items: center;
 }
