@@ -4,6 +4,7 @@ function AddButton(props) {
   return (
     <div>
       <Button
+        startIcon={props.icon}
         variant={props.variant}
         style={{ backgroundColor: props.color, borderRadius: 0 }}
         onClick={props.onClick}
