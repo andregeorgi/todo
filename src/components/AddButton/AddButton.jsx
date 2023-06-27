@@ -4,8 +4,8 @@ function AddButton(props) {
   return (
     <div>
       <Button
-        variant="contained"
-        style={{ backgroundColor: "#212d40" }}
+        variant={props.variant}
+        style={{ backgroundColor: props.color, borderRadius: 0 }}
         onClick={props.onClick}
       >
         {props.label}
