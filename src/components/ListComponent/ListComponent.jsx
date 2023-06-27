@@ -6,7 +6,6 @@ import Stack from "@mui/material/Stack";
 
 import Box from "@mui/material/Box";
 import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -24,23 +23,27 @@ function ListComponent() {
     { numberTodo: 4, content: "reading", date: "4/3/2023" },
   ];
   const [currentText, setCurrentText] = useState("");
-  const [list, setList] = React.useState(toDo);
+  const [list, setList] = useState(toDo);
   const [currentTodo, setCurrentTodo] = useState(null);
-
   const [open, setOpen] = useState(false);
+
+  const handleClose = () => setOpen(false);
   const handleOpen = (todoNumber) => {
     setOpen(true);
     setCurrentTodo(todoNumber);
   };
-  const handleClose = () => setOpen(false);
 
   const style = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
-    height: 430,
+    height: 350,
     bgcolor: "background.paper",
     border: "2px solid #fff",
     boxShadow: 24,
@@ -84,7 +87,7 @@ function ListComponent() {
           <AddButton
             label="Add"
             variant="contained"
-            color="#212d40"
+            backgroundColor="#212d40"
             icon={<AddIcon />}
             onClick={() => {
               const newItem = {
@@ -98,7 +101,7 @@ function ListComponent() {
           <AddButton
             label="Delete All"
             variant="contained"
-            color="#d11a2a"
+            backgroundColor="#d11a2a"
             icon={<DeleteIcon />}
             onClick={() => setList([])}
           />
@@ -114,14 +117,14 @@ function ListComponent() {
                 id="modal-modal-title"
                 variant="h5"
                 component="h2"
-                style={{ height: 150, textAlign: "center", fontWeight: "bold" }}
+                style={{ fontWeight: "bold", paddingBottom: 115 }}
               >
                 Fill in the input field
               </Typography>
 
               <TextInput
                 label="Edit Todo"
-                style={{ textAlign: "center", fontWeight: "bold" }}
+                style={{ fontWeight: "bold" }}
                 setTodo={(e) => setCurrentText(e.target.value)}
               ></TextInput>
 
@@ -139,10 +142,11 @@ function ListComponent() {
                   <CloseIcon />
                 </IconButton>
               </DialogTitle>
-              <DialogActions style={{ height: 355 }}>
+              <DialogActions style={{ paddingTop: 104 }}>
                 <AddButton
                   label="Cancel"
-                  variant="contained"
+                  variant="text"
+                  color="#2a2a2a"
                   icon={<ClearIcon />}
                   onClick={handleClose}
                 />
@@ -150,7 +154,7 @@ function ListComponent() {
                 <AddButton
                   label="Add"
                   variant="contained"
-                  color="#212d40"
+                  backgroundColor="#212d40"
                   icon={<AddIcon />}
                   onClick={handleTextInputEdit}
                 >

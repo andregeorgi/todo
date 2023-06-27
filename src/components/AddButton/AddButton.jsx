@@ -6,7 +6,11 @@ function AddButton(props) {
       <Button
         startIcon={props.icon}
         variant={props.variant}
-        style={{ backgroundColor: props.color, borderRadius: 0 }}
+        style={{
+          backgroundColor: props.backgroundColor,
+          borderRadius: 0,
+          color: props.color,
+        }}
         onClick={props.onClick}
       >
         {props.label}
