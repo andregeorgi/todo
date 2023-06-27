@@ -4,9 +4,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import AddButton from "../AddButton/AddButton";
 
 function Todo(props) {
-  console.log(props.contentTodo);
   return (
     <div>
       <List sx={{ width: "100%", maxWidth: 360 }}>
@@ -14,20 +14,25 @@ function Todo(props) {
           <ListItemText
             primary={<span>{"#" + props.index}</span>}
             secondary={
-              <p>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  {props.contentTodo}
-                </Typography>
-              </p>
+              <Typography
+                sx={{ display: "inline" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {props.contentTodo}
+              </Typography>
             }
           />
           <ListItemText secondary={props.date}></ListItemText>
+          <AddButton label="Edit" variant="text" onClick={props.onClickEdit} />
+          <AddButton
+            label="Remove"
+            variant="text"
+            onClick={props.onClickRemove}
+          ></AddButton>
         </ListItem>
+
         <Divider variant="inset" component="li" />
       </List>
     </div>
