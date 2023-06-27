@@ -7,12 +7,13 @@ import Typography from "@mui/material/Typography";
 import AddButton from "../AddButton/AddButton";
 
 function Todo(props) {
+  const { toDo } = props;
   return (
     <div>
       <List sx={{ width: "100%", maxWidth: 360 }}>
         <ListItem alignItems="flex-start">
           <ListItemText
-            primary={<span>{"#" + props.index}</span>}
+            primary={<span>{"#" + toDo.numberTodo}</span>}
             secondary={
               <Typography
                 sx={{ display: "inline" }}
@@ -20,11 +21,11 @@ function Todo(props) {
                 variant="body2"
                 color="text.primary"
               >
-                {props.contentTodo}
+                {toDo.content}
               </Typography>
             }
           />
-          <ListItemText secondary={props.date}></ListItemText>
+          <ListItemText secondary={toDo.date}></ListItemText>
           <AddButton label="Edit" variant="text" onClick={props.onClickEdit} />
           <AddButton
             label="Remove"
@@ -33,7 +34,7 @@ function Todo(props) {
           ></AddButton>
         </ListItem>
 
-        <Divider variant="inset" component="li" />
+        <Divider variant="outlined" component="li" />
       </List>
     </div>
   );
