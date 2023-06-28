@@ -21,7 +21,7 @@ function TextInput(props) {
     >
       <TextField
         id="outlined-basic"
-        style={{ width: 280 }}
+        style={{ width: 360 }}
         InputProps={{ sx: { borderRadius: 0, border: "solid 1px #6b718b" } }}
         size="small"
         label={props.label}
