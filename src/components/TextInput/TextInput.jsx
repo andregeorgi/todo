@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
 function TextInput(props) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(props.defaultValue ?? "");
 
   function handleText(event) {
     props.setTodo(event);

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AddButton from "../AddButton";
+import Button from "@mui/material/Button";
 import TextInput from "../TextInput";
 import Todo from "../Todo/Todo";
 import Stack from "@mui/material/Stack";
@@ -11,23 +12,28 @@ import Typography from "@mui/material/Typography";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function ListComponent() {
   const toDo = [
-    { numberTodo: 1, content: "shopping", date: "6/11/2023" },
-    { numberTodo: 2, content: "market", date: "11/1/2022" },
-    { numberTodo: 3, content: "cooking", date: "1/16/2023" },
-    { numberTodo: 4, content: "reading", date: "4/3/2023" },
+    { numberTodo: 0, prio: 1, content: "shopping", date: "6/11/2023" },
+    { numberTodo: 1, prio: 3, content: "market", date: "11/1/2022" },
+    { numberTodo: 2, prio: 1, content: "cooking", date: "1/16/2023" },
+    { numberTodo: 3, prio: 2, content: "reading", date: "14/3/2023" },
   ];
   const [currentText, setCurrentText] = useState("");
   const [list, setList] = useState(toDo);
   const [currentTodo, setCurrentTodo] = useState(null);
   const [open, setOpen] = useState(false);
+  const [currentCounter, setCurrentCounter] = useState(1);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setList(toDo);
+    setOpen(false);
+  };
   const handleOpen = (todoNumber) => {
     setOpen(true);
     setCurrentTodo(todoNumber);
@@ -43,15 +49,33 @@ function ListComponent() {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
-    height: 350,
     bgcolor: "background.paper",
     border: "2px solid #fff",
     boxShadow: 24,
     p: 4,
+    padding: 0,
   };
 
   function handleTextInput(newText) {
     setCurrentText(newText);
+  }
+
+  function handleEdit() {
+    handleTextInputEdit();
+    const newList = list.map((item) => {
+      if (item.numberTodo === currentTodo) {
+        if (item.prio < 3) {
+          const updatedItem = {
+            ...item,
+            prio: currentCounter,
+          };
+
+          return updatedItem;
+        }
+      }
+      return item;
+    });
+    setList(newList);
   }
 
   function handleTextInputEdit() {
@@ -76,6 +100,14 @@ function ListComponent() {
     );
   }
 
+  function handleIncrement() {
+    setCurrentCounter(list[currentTodo].prio + 1);
+  }
+
+  function handleDecrement() {
+    setCurrentCounter(list[currentTodo].prio - 1);
+  }
+
   return (
     <>
       <div>
@@ -92,6 +124,7 @@ function ListComponent() {
             onClick={() => {
               const newItem = {
                 numberTodo: list.length + 1,
+                prio: 1,
                 content: currentText,
                 date: new Date().toLocaleDateString(),
               };
@@ -105,28 +138,54 @@ function ListComponent() {
             icon={<DeleteIcon />}
             onClick={() => setList([])}
           />
+        </Stack>
+      </div>
+      <div>
+        {list.map((item, index) => (
+          <Todo
+            key={index}
+            toDo={item}
+            onClickRemove={() => handleRemove(item.numberTodo)}
+            onClickEdit={() => handleOpen(item.numberTodo)}
+          />
+        ))}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <div>
+            <Box sx={style} style={{ borderRadius: 10 }}>
+              <div style={{ marginBottom: 70, marginTop: 20 }}>
+                <Typography
+                  id="modal-modal-title"
+                  variant="h5"
+                  component="h2"
+                  style={{ fontWeight: "bold" }}
+                >
+                  Fill in the input field
+                </Typography>
+              </div>
+              <div>
+                <TextInput
+                  label="Edit Todo"
+                  style={{ fontWeight: "bold" }}
+                  defaultValue={list[currentTodo]?.content} //daca nu exista list[currentTodo], iti da null
+                  setTodo={(e) => setCurrentText(e.target.value)}
+                ></TextInput>
+              </div>
 
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography
-                id="modal-modal-title"
-                variant="h5"
-                component="h2"
-                style={{ fontWeight: "bold", paddingBottom: 115 }}
-              >
-                Fill in the input field
-              </Typography>
-
-              <TextInput
-                label="Edit Todo"
-                style={{ fontWeight: "bold" }}
-                setTodo={(e) => setCurrentText(e.target.value)}
-              ></TextInput>
+              <Box>
+                <div>
+                  <Typography>Change priority:</Typography>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <Button onClick={handleDecrement}>-</Button>
+                  <Box sx={{ textAlign: "center", m: 1 }}>{currentCounter}</Box>
+                  <Button onClick={handleIncrement}>+</Button>
+                </div>
+              </Box>
 
               <DialogTitle sx={{ m: 0, p: 2 }}>
                 <IconButton
@@ -142,7 +201,7 @@ function ListComponent() {
                   <CloseIcon />
                 </IconButton>
               </DialogTitle>
-              <DialogActions style={{ paddingTop: 104 }}>
+              <DialogActions>
                 <AddButton
                   label="Cancel"
                   variant="text"
@@ -152,28 +211,16 @@ function ListComponent() {
                 />
 
                 <AddButton
-                  label="Add"
+                  label="Edit"
                   variant="contained"
                   backgroundColor="#212d40"
-                  icon={<AddIcon />}
-                  onClick={handleTextInputEdit}
-                >
-                  Save
-                </AddButton>
+                  icon={<EditIcon />}
+                  onClick={handleEdit}
+                ></AddButton>
               </DialogActions>
             </Box>
-          </Modal>
-        </Stack>
-      </div>
-      <div>
-        {list.map((item, index) => (
-          <Todo
-            key={index}
-            toDo={item}
-            onClickRemove={() => handleRemove(item.numberTodo)}
-            onClickEdit={() => handleOpen(item.numberTodo)}
-          />
-        ))}
+          </div>
+        </Modal>
       </div>
     </>
   );
