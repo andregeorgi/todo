@@ -64,6 +64,12 @@ function ListComponent() {
     setCurrentTodo(todoNumber);
   };
 
+  const handleOpenAccordion = (todoNumber) => {
+    setOpenAccordion(!openAccordion);
+
+    setCurrentTodo(todoNumber);
+  };
+
   const style = {
     display: "flex",
     justifyContent: "center",
@@ -172,8 +178,8 @@ function ListComponent() {
             toDo={item}
             onClickRemove={() => handleRemove(item.numberTodo)}
             onClickEdit={() => handleOpen(item.numberTodo)}
-            handleClick={() => setOpenAccordion(!openAccordion)}
-            isOpen={openAccordion}
+            handleClick={() => handleOpenAccordion(item.numberTodo)}
+            isOpen={currentTodo === item.numberTodo && openAccordion}
           />
         ))}
         <Modal
