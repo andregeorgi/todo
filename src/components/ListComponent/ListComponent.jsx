@@ -19,15 +19,40 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 function ListComponent() {
   const toDo = [
-    { numberTodo: 0, prio: 1, content: "shopping", date: "6/11/2023" },
-    { numberTodo: 1, prio: 3, content: "market", date: "11/1/2022" },
-    { numberTodo: 2, prio: 1, content: "cooking", date: "1/16/2023" },
-    { numberTodo: 3, prio: 2, content: "reading", date: "14/3/2023" },
+    {
+      numberTodo: 0,
+      prio: 1,
+      content: "shopping",
+      date: "6/11/2023",
+      subTasks: ["shoes", "clothes", "jewerly", "accessories", "hats"],
+    },
+    {
+      numberTodo: 1,
+      prio: 3,
+      content: "market",
+      date: "11/1/2022",
+      subTasks: ["banana", "apple", "milk"],
+    },
+    {
+      numberTodo: 2,
+      prio: 1,
+      content: "cooking",
+      date: "1/16/2023",
+      subTasks: ["Black peas", "Apple pie", "Steak pie", "Soup"],
+    },
+    {
+      numberTodo: 3,
+      prio: 2,
+      content: "reading",
+      date: "14/3/2023",
+      subTasks: ["Charlotte’s Web", "The Outsiders"],
+    },
   ];
   const [currentText, setCurrentText] = useState("");
   const [list, setList] = useState(toDo);
   const [currentTodo, setCurrentTodo] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState(false);
   const [currentCounter, setCurrentCounter] = useState(1);
 
   const handleClose = () => {
@@ -147,6 +172,8 @@ function ListComponent() {
             toDo={item}
             onClickRemove={() => handleRemove(item.numberTodo)}
             onClickEdit={() => handleOpen(item.numberTodo)}
+            handleClick={() => setOpenAccordion(!openAccordion)}
+            isOpen={openAccordion}
           />
         ))}
         <Modal

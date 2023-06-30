@@ -36,3 +36,8 @@ code {
 .padding-right-btn {
   padding-right: 34px;
 }
+
+.no-background:first-child:hover,
+.no-background:first-child:active {
+  background-color: rgba(255, 255, 255, 1);
+}
