@@ -6,6 +6,11 @@ import Todo from "../Todo/Todo";
 import Stack from "@mui/material/Stack";
 
 import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 import DialogActions from "@mui/material/DialogActions";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
@@ -50,18 +55,27 @@ function ListComponent() {
   ];
   const [currentText, setCurrentText] = useState("");
   const [list, setList] = useState(toDo);
+  const [filteredList, setFilteredList] = useState([]);
   const [currentTodo, setCurrentTodo] = useState(null);
   const [open, setOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(false);
   const [currentCounter, setCurrentCounter] = useState(1);
+  const [filterPrio, setFilterPrio] = useState("");
+  const [filterContent, setFilterContent] = useState("");
+
+  const prios = Array.from(new Set(list.map((prioTodo) => prioTodo.prio)));
+  const contentTodos = Array.from(
+    new Set(list.map((contentTodo) => contentTodo.content))
+  );
 
   const handleClose = () => {
     setList(toDo);
     setOpen(false);
   };
   const handleOpen = (todoNumber) => {
-    setOpen(true);
+    setCurrentCounter(list[todoNumber].prio);
     setCurrentTodo(todoNumber);
+    setOpen(true);
   };
 
   const handleOpenAccordion = (todoNumber) => {
@@ -95,14 +109,12 @@ function ListComponent() {
     handleTextInputEdit();
     const newList = list.map((item) => {
       if (item.numberTodo === currentTodo) {
-        if (item.prio < 3) {
-          const updatedItem = {
-            ...item,
-            prio: currentCounter,
-          };
+        const updatedItem = {
+          ...item,
+          prio: currentCounter,
+        };
 
-          return updatedItem;
-        }
+        return updatedItem;
       }
       return item;
     });
@@ -132,11 +144,29 @@ function ListComponent() {
   }
 
   function handleIncrement() {
-    setCurrentCounter(list[currentTodo].prio + 1);
+    if (currentCounter < 3) setCurrentCounter(currentCounter + 1);
   }
 
   function handleDecrement() {
-    setCurrentCounter(list[currentTodo].prio - 1);
+    if (currentCounter > 1) setCurrentCounter(currentCounter - 1);
+  }
+
+  function handleFilterByPrio(e) {
+    setFilterPrio(e.target.value);
+    setFilteredList(list.filter((item, index) => item.prio === e.target.value));
+  }
+
+  function handleFilterByContent(e) {
+    setFilterContent(e.target.value);
+    setFilteredList(
+      list.filter((item, index) => item.content === e.target.value)
+    );
+  }
+
+  function clearFilters() {
+    setFilterPrio("");
+    setFilterContent("");
+    setFilteredList("");
   }
 
   return (
@@ -154,10 +184,11 @@ function ListComponent() {
             icon={<AddIcon />}
             onClick={() => {
               const newItem = {
-                numberTodo: list.length + 1,
+                numberTodo: list.length,
                 prio: 1,
                 content: currentText,
                 date: new Date().toLocaleDateString(),
+                subTasks: ["subtask1"],
               };
               setList([...list, newItem]);
             }}
@@ -172,16 +203,88 @@ function ListComponent() {
         </Stack>
       </div>
       <div>
-        {list.map((item, index) => (
-          <Todo
-            key={index}
-            toDo={item}
-            onClickRemove={() => handleRemove(item.numberTodo)}
-            onClickEdit={() => handleOpen(item.numberTodo)}
-            handleClick={() => handleOpenAccordion(item.numberTodo)}
-            isOpen={currentTodo === item.numberTodo && openAccordion}
+        <Stack spacing={2} direction="row" className="align-items">
+          <FormControl sx={{ m: 1, minWidth: 250 }} size="small">
+            <InputLabel id="demo-select-small-label">Filter prio</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              label="Filter"
+              onChange={handleFilterByPrio}
+              value={filterPrio}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {prios.map((filterPrio, index) => {
+                return (
+                  <MenuItem key={index} value={filterPrio}>
+                    {filterPrio}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 250 }} size="small">
+            <InputLabel id="demo-select-small-label">Filter todo</InputLabel>
+            <Select
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              label="Filter"
+              onChange={handleFilterByContent}
+              value={filterContent}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {contentTodos.map((filterContent, index) => {
+                return (
+                  <MenuItem key={index} value={filterContent}>
+                    {filterContent}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+
+          <AddButton
+            label="Remove filters"
+            variant="contained"
+            backgroundColor="#808080"
+            icon={<ClearIcon />}
+            onClick={clearFilters}
           />
-        ))}
+        </Stack>
+      </div>
+
+      <div>
+        {filteredList && filteredList.length ? (
+          <>
+            {filteredList.map((item, index) => (
+              <Todo
+                key={index}
+                toDo={item}
+                onClickRemove={() => handleRemove(item.numberTodo)}
+                onClickEdit={() => handleOpen(item.numberTodo)}
+                handleClick={() => handleOpenAccordion(item.numberTodo)}
+                isOpen={currentTodo === item.numberTodo && openAccordion}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {list.map((item, index) => (
+              <Todo
+                key={index}
+                toDo={item}
+                onClickRemove={() => handleRemove(item.numberTodo)}
+                onClickEdit={() => handleOpen(item.numberTodo)}
+                handleClick={() => handleOpenAccordion(item.numberTodo)}
+                isOpen={currentTodo === item.numberTodo && openAccordion}
+              />
+            ))}
+          </>
+        )}
         <Modal
           open={open}
           onClose={handleClose}
