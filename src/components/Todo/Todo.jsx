@@ -27,8 +27,8 @@ function Todo(props) {
             <ListItemText
               primary={
                 <div>
-                  <span>{"#" + toDo.numberTodo}</span>
-                  <span>{"-prio:" + toDo.prio}</span>
+                  <span>#{toDo.numberTodo + 1}</span>
+                  <span>__Prio:{toDo.prio}</span>
                 </div>
               }
               secondary={
